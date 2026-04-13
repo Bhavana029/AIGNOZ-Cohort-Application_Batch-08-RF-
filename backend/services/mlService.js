@@ -3,7 +3,7 @@ const axios = require("axios");
 const predictHealth = async (data) => {
 
   const response = await axios.post(
-    "http://127.0.0.1:8000/predict",
+    "https://aignoz-cohort-application-batch-08-rf-1.onrender.com/predict",
     {
       features: [
         data.stress,
