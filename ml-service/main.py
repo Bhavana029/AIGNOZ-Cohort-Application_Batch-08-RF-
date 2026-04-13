@@ -1,23 +1,21 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from predict import predict_risk
 
 app = FastAPI()
+
+class InputData(BaseModel):
+    features: list
 
 @app.get("/")
 def home():
     return {"message": "Wellbeing AI ML Service Running"}
 
 @app.post("/predict")
+def predict(data: InputData):
 
-def predict(data: dict):
-
-    result = predict_risk(data)
-
-    if result == 1:
-        risk = "High Risk"
-    else:
-        risk = "Low Risk"
+    result = predict_risk({"features": data.features})
 
     return {
-        "risk_level": risk
+        "prediction": result   # ✅ matches backend expectation
     }
