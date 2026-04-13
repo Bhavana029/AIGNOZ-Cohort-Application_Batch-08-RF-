@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Zap, Wind, Salad, Moon, Footprints, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import API from "@/services/api";
 
-// const response = await API.get("/recommendations");
+
+
 const iconMap = {
   stress: Wind,
   sleep: Moon,
@@ -32,77 +32,50 @@ const Recommendations = () => {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchRecommendations = async () => {
-  //     try {
-  //       const token = localStorage.getItem("token");
-
-  //       const response = await fetch(
-  //         "https://aignoz-cohort-application-batch-08-rf.onrender.com/api/recommendations",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`
-  //           }
-  //         }
-  //       );
-
-  //       const data = await response.json();
-
-  //       if (response.ok) {
-  //         const newRecs = data.data || [];
-  //         const newTitles = newRecs.map(r => r.title);
-
-  //         const newSignature = JSON.stringify(newTitles);
-  //         const oldSignature = localStorage.getItem("recSignature");
-
-  //         if (oldSignature && oldSignature !== newSignature) {
-  //           localStorage.removeItem("doneRecs");
-  //           setDone(new Set());
-  //         }
-
-  //         localStorage.setItem("recSignature", newSignature);
-  //         setRecs(newRecs);
-  //       } else {
-  //         console.error(data.message);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch recommendations", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchRecommendations();
-  // }, []);
-
   useEffect(() => {
-  const fetchRecommendations = async () => {
-    try {
-      const response = await API.get("/recommendations");
+    const fetchRecommendations = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-      const newRecs = response.data.data || [];
-      const newTitles = newRecs.map(r => r.title);
+        const response = await fetch(
+          "https://aignoz-cohort-application-batch-08-rf.onrender.com/api/recommendations",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
 
-      const newSignature = JSON.stringify(newTitles);
-      const oldSignature = localStorage.getItem("recSignature");
+        const data = await response.json();
 
-      if (oldSignature && oldSignature !== newSignature) {
-        localStorage.removeItem("doneRecs");
-        setDone(new Set());
+        if (response.ok) {
+          const newRecs = data.data || [];
+          const newTitles = newRecs.map(r => r.title);
+
+          const newSignature = JSON.stringify(newTitles);
+          const oldSignature = localStorage.getItem("recSignature");
+
+          if (oldSignature && oldSignature !== newSignature) {
+            localStorage.removeItem("doneRecs");
+            setDone(new Set());
+          }
+
+          localStorage.setItem("recSignature", newSignature);
+          setRecs(newRecs);
+        } else {
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch recommendations", error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      localStorage.setItem("recSignature", newSignature);
-      setRecs(newRecs);
+    fetchRecommendations();
+  }, []);
 
-    } catch (error) {
-      console.error("Failed to fetch recommendations", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchRecommendations();
-}, []);
+ 
   return (
     <DashboardLayout>
       <div className="max-w-3xl mx-auto">
