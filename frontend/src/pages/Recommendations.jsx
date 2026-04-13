@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Zap, Wind, Salad, Moon, Footprints, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import API from "@/services/api";
 
+const response = await API.get("/recommendations");
 const iconMap = {
   stress: Wind,
   sleep: Moon,
@@ -36,7 +38,7 @@ const Recommendations = () => {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          "http://localhost:5000/api/recommendations",
+          "https://aignoz-cohort-application-batch-08-rf.onrender.com/api/recommendations",
           {
             headers: {
               Authorization: `Bearer ${token}`
