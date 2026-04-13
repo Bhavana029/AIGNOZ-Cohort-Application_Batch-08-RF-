@@ -16,6 +16,7 @@ const AIInsights = () => {
   useEffect(() => {
     const fetchInsights = async () => {
       try {
+        console.log("Calling API...");
         const res = await API.get("/insights");
         setInsights(res.data.data);
       } catch (error) {
